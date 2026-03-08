@@ -1,0 +1,32 @@
+[package]
+name = "OpenQBot"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reqwest = { version = "0.12.9", features = ["blocking"] }
+serde_json = "1.0.133"
+serde = { version = "1.0.216", features = ["derive"] }
+hmac = "0.12.1"
+sha2 = "0.10.8"
+hex = "0.4.3"
+dotenv = "0.15.0"
+rand = "0.8.5"
+fastwebsockets = { version = "0.8.0", features = ["upgrade"] }
+tokio = { version = "1.25.0", default-features = false, features = ["full", "macros", "io-util"] }
+tokio-rustls = "0.24.0"
+anyhow = "1.0.94"
+bytes = "1.9.0"
+hyper = "1.5.1"
+hyper-util = "0.1.0"
+http-body-util = { version = "0.1.0"}
+webpki-roots = "0.23.0"
+uuid = { version = "1.11.0", features = ["v4", "fast-rng"] }
+base64 = "0.22.1"
+
+[dev-dependencies]
+tokio-rustls = "0.24.0"
+tokio = { version = "1.25.0", features = ["full", "macros"] }
+hyper-util = { version = "0.1.0", features = ["tokio"] }
+http-body-util = { version = "0.1.0" }
+
