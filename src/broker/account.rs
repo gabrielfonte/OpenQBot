@@ -2,6 +2,7 @@ use std::fmt;
 use serde_json::Value;
 
 #[derive(Eq, PartialEq, Hash, Clone)]
+#[allow(dead_code)]
 pub enum KlineInterval {
     OneSecond,
     OneMinute,
@@ -45,6 +46,7 @@ impl fmt::Display for KlineInterval {
     }
 }
 
+#[allow(dead_code)]
 pub enum BalanceType {
     Spot,
     Margin,
@@ -63,6 +65,7 @@ impl fmt::Display for BalanceType {
     }
 }
 
+#[allow(dead_code)]
 pub enum OrderSide {
     Buy,
     Sell,
@@ -77,6 +80,7 @@ impl fmt::Display for OrderSide {
     }
 }
 
+#[allow(dead_code)]
 pub enum OrderFillType {
     FillOrKill,
     ImmediateOrCancel,
@@ -92,6 +96,7 @@ impl fmt::Display for OrderFillType {
         }
     }
 }
+#[allow(dead_code)]
 pub trait Account {
     fn new() -> Result<Self, Box<dyn std::error::Error>> where Self: Sized;
 

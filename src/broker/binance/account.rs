@@ -6,7 +6,7 @@ use serde_json::json;
 use crate::broker::binance::request;
 use crate::broker::account::{Account, BalanceType, OrderSide};
 
-#[warn(unused)]
+#[allow(dead_code)]
 #[derive(Serialize, Deserialize)]
 struct MarketOrderParams {
     pub symbol: String,
@@ -19,7 +19,7 @@ struct MarketOrderParams {
     pub quote_order_qty: Option<f64>,
 }
 
-#[warn(unused)]
+#[allow(dead_code)]
 #[derive(Serialize, Deserialize)]
 struct LimitOrderParams {
     pub symbol: String,
@@ -32,7 +32,7 @@ struct LimitOrderParams {
     pub time_in_force: String,
 }
 
-#[warn(unused)]
+#[allow(dead_code)]
 #[derive(Serialize, Deserialize)]
 struct StopLimitOrderParams {
     pub symbol: String,
@@ -47,12 +47,6 @@ struct StopLimitOrderParams {
     pub stop_price: Option<f64>,
     #[serde(rename = "trailingDelta", skip_serializing_if = "Option::is_none")]
     pub trailing_delta: Option<f64>,
-}
-
-enum OrderParams {
-    Market(MarketOrderParams),
-    Limit(LimitOrderParams),
-    StopLimit(StopLimitOrderParams),
 }
 
 #[derive(Clone)]

@@ -43,7 +43,7 @@ impl Request {
         }
     }
 
-    #[warn(unused)]
+    #[allow(dead_code)]
     pub fn new_unsigned(method: &str, params: Option<Value>) -> Self {
         let uuid = Uuid::new_v4();
         let req_time: u128 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis();

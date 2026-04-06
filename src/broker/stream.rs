@@ -7,6 +7,7 @@ pub type SubscriberId = u64;
 pub type Subscriber = Arc<dyn Fn(MarketEvent) + Send + Sync>;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
+#[allow(dead_code)]
 pub enum EventAndSymbol {
     KLine(String, KlineInterval),
     Trade(String),
