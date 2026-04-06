@@ -1,10 +1,10 @@
-use serde_json::Value;
 use std::collections::HashMap;
 use std::sync::Arc;
 use crate::broker::account::KlineInterval;
+use crate::domain::market::MarketEvent;
 
 pub type SubscriberId = u64;
-pub type Subscriber = Arc<dyn Fn(Value) + Send + Sync>;
+pub type Subscriber = Arc<dyn Fn(MarketEvent) + Send + Sync>;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 pub enum EventAndSymbol {
@@ -39,7 +39,7 @@ impl Publisher {
         }
     }
 
-    pub fn notify(&self, event: &EventAndSymbol, value: Value) {
+    pub fn notify(&self, event: &EventAndSymbol, value: MarketEvent) {
         if let Some(listeners) = self.events.get(event) {
             for (_, listener) in listeners {
                 listener(value.clone());

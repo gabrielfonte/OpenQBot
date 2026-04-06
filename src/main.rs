@@ -5,17 +5,15 @@ use std::sync::Arc;
 use crate::broker::account::{Account, BalanceType, KlineInterval};
 use std::time;
 use dotenv::dotenv;
-use hmac::Mac;
-use serde_json::Value;
-use tokio::io::AsyncWriteExt;
 use tokio::sync::RwLock;
 use broker::binance::account;
 use crate::broker::binance::stream::BinanceStreamProvider;
 use crate::broker::stream::{EventAndSymbol, StreamProvider};
-use crate::indicators::sma::SMA;
+use crate::domain::market::MarketEvent;
 use crate::strategies::strategy::TradingStrategy;
 
 mod broker;
+mod domain;
 mod indicators;
 mod strategies;
 
@@ -33,8 +31,10 @@ async fn main() -> Result<(), ()>{
     // Order book updates for BTC/USDT
     stream.subscribe(
         EventAndSymbol::Trade("btcusdt".to_string()),
-        Arc::new(|value: Value| {
-            //println!("Trade received: {}", value);
+        Arc::new(|event: MarketEvent| {
+            if let MarketEvent::Trade(trade) = event {
+                let _ = trade.price;
+            }
         }),
     );
 
@@ -44,17 +44,11 @@ async fn main() -> Result<(), ()>{
     let sub_id = stream.subscribe(
         EventAndSymbol::KLine("btcusdt".to_string(), KlineInterval::OneSecond),
         Arc::new({
-            move |value: Value| {
+            move |event: MarketEvent| {
                 let lock = Arc::clone(&bollinger_bands_strategy);
                 tokio::spawn(async move {
-                    //println!("Kline received: {}", value);
-                    let close = value["k"]["c"]
-                        .as_str()
-                        .and_then(|s| s.parse::<f64>().ok())
-                        .unwrap_or(0.0);
-                    //println!("Close price: {}", close);
                     let mut bollinger_bands = lock.write().await;
-                    bollinger_bands.on_kline("btcusdt", "1s", value);
+                    bollinger_bands.on_event(&event);
                 });
             }
         }),

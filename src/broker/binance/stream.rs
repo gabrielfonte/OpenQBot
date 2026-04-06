@@ -1,4 +1,5 @@
 use super::ws;
+use super::mapper;
 use fastwebsockets::Frame;
 use fastwebsockets::OpCode;
 use serde_json::Value;
@@ -66,7 +67,11 @@ impl StreamProvider for BinanceStreamProvider {
                                         Ok(v) => v,
                                         Err(_) => continue,
                                     };
-                                    publisher.lock().unwrap().notify(&event_key, value);
+                                    let event_value = match mapper::to_market_event(&event_key, value) {
+                                        Some(v) => v,
+                                        None => continue,
+                                    };
+                                    publisher.lock().unwrap().notify(&event_key, event_value);
                                 }
                                 OpCode::Close => {
                                     eprintln!("WS closed for {}", endpoint);

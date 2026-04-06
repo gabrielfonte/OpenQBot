@@ -1,5 +1,5 @@
-use serde_json::Value;
 use crate::indicators::bollinger_bands::BollingerBands;
+use crate::domain::market::MarketEvent;
 use super::strategy::TradingStrategy;
 
 pub struct BollingerBounceTradingStrategy {
@@ -17,29 +17,19 @@ impl BollingerBounceTradingStrategy {
 }
 
 impl TradingStrategy for BollingerBounceTradingStrategy {
-    fn on_kline(&mut self, symbol: &str, interval: &str, kline: Value) {
-        let close_price = kline["k"]["c"]
-            .as_str()
-            .and_then(|s| s.parse::<f64>().ok())
-            .unwrap_or(0.0);
+    fn on_event(&mut self, event: &MarketEvent) {
+        if let MarketEvent::KLine(kline) = event {
+            let close_price = kline.close;
 
-        if let Some((upper_band, middle_band, lower_band)) = self.bollinger_bands.update(close_price) {
-            if close_price < lower_band && !self.in_position {
-                self.in_position = true;
-                println!("Buy signal for {} at price {}", symbol, close_price);
-            } else if close_price > upper_band && self.in_position {
-                self.in_position = false;
-                println!("Sell signal for {} at price {}", symbol, close_price);
+            if let Some((upper_band, _middle_band, lower_band)) = self.bollinger_bands.update(close_price) {
+                if close_price < lower_band && !self.in_position {
+                    self.in_position = true;
+                    println!("Buy signal for {} at price {}", kline.symbol, close_price);
+                } else if close_price > upper_band && self.in_position {
+                    self.in_position = false;
+                    println!("Sell signal for {} at price {}", kline.symbol, close_price);
+                }
             }
         }
-    }
-
-    fn on_trade(&mut self, symbol: &str, trade: Value) {
-    }
-
-    fn on_aggregate_trade(&mut self, symbol: &str, agg_trade: Value) {
-    }
-
-    fn on_average_price(&mut self, symbol: &str, avg_price: Value) {
     }
 }
