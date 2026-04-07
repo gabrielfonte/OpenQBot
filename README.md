@@ -7,11 +7,14 @@ The goal of OpenQBot is to provide a flexible and customizable trading solution 
 We want to provide a fast and resource-efficient bot that could run even on low-end hardware, such as a Raspberry Pi. 
 This allows users to run the bot without needing to invest in expensive hardware or hosting services.
 
+# Architecture V1
+- [docs/ARCHITECTURE_PROPOSAL_V1](docs/ARCHITECTURE_PROPOSAL_V1.md)
+
 # Roadmap
 
 ## Q2 2026:
 - Implement a modular architecture that allows for easy integration of new trading strategies and platforms.
-- Provide support for executing trades on Binance, ByBit and CoinEx.
+- Provide support for executing trades on Binance, ByBit, CoinEx and Kraken.
 - Implement a robust risk management system to protect against losses.
 - Implement one or more trading strategies, such as trend following, mean reversion, or arbitrage.
 
