@@ -4,7 +4,7 @@ use crate::broker::ws;
 use super::mapper;
 use fastwebsockets::{Frame, OpCode, Payload};
 use serde_json::{json, Value};
-use crate::broker::account::KlineInterval;
+use crate::domain::market::KlineInterval;
 use crate::broker::stream::{EventAndSymbol, Publisher, StreamProvider, Subscriber, SubscriberId};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};

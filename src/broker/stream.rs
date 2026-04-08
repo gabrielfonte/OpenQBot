@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::sync::Arc;
-use crate::broker::account::KlineInterval;
+use crate::domain::market::KlineInterval;
 use crate::domain::market::MarketEvent;
 
 pub type SubscriberId = u64;

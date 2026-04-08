@@ -24,6 +24,10 @@ webpki-roots = "0.23.0"
 uuid = { version = "1.11.0", features = ["v4", "fast-rng"] }
 base64 = "0.22.1"
 
+[features]
+binance_demo = []
+kraken_demo = []
+
 [dev-dependencies]
 tokio-rustls = "0.24.0"
 tokio = { version = "1.25.0", features = ["full", "macros"] }

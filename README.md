@@ -26,3 +26,11 @@ This allows users to run the bot without needing to invest in expensive hardware
 ## Q4 2026:
 - Add TradingView Support (via Webhooks).
 - Implement a notification system to alert users of important events, such as executed trades or changes in market conditions.
+
+# Demo
+
+While in early development phases, the application is not fully implemented, so there is a demo application used for testing the features already implemented:
+- Binance: Configuring the API Keys (BINANCE_API_KEY and BINANCE_API_SECRET)
+- Kraken: Configuring the API Keys (KRAKEN_API_KEY and KRAKEN_API_SECRET)
+- Build the application with feature flag enabled for the desired exchange:
+e.g `cargo run --features "binance_demo"` or `cargo run --features "kraken_demo"`

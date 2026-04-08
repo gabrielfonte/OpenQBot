@@ -4,6 +4,8 @@ use crate::domain::market::{
     AggregateTradeEvent, AveragePriceEvent, KlineEvent, MarketEvent, TradeEvent,
 };
 
+const EXCHANGE_NAME: &str = "Binance";
+
 pub fn to_market_event(event: &EventAndSymbol, value: Value) -> Option<MarketEvent> {
     match event {
         EventAndSymbol::KLine(symbol, interval) => {
@@ -13,6 +15,7 @@ pub fn to_market_event(event: &EventAndSymbol, value: Value) -> Option<MarketEve
             let low = value["k"]["l"].as_str()?.parse::<f64>().ok()?;
             let volume = value["k"]["v"].as_str()?.parse::<f64>().ok()?;
             Some(MarketEvent::KLine(KlineEvent {
+                exchange: EXCHANGE_NAME,
                 symbol: symbol.clone(),
                 interval: interval.clone(),
                 open,
@@ -26,6 +29,7 @@ pub fn to_market_event(event: &EventAndSymbol, value: Value) -> Option<MarketEve
             let price = value["p"].as_str().and_then(|s| s.parse::<f64>().ok());
             let quantity = value["q"].as_str().and_then(|s| s.parse::<f64>().ok());
             Some(MarketEvent::Trade(TradeEvent {
+                exchange: EXCHANGE_NAME,
                 symbol: symbol.clone(),
                 price,
                 quantity,
@@ -35,6 +39,7 @@ pub fn to_market_event(event: &EventAndSymbol, value: Value) -> Option<MarketEve
             let price = value["p"].as_str().and_then(|s| s.parse::<f64>().ok());
             let quantity = value["q"].as_str().and_then(|s| s.parse::<f64>().ok());
             Some(MarketEvent::AggregateTrade(AggregateTradeEvent {
+                exchange: EXCHANGE_NAME,
                 symbol: symbol.clone(),
                 price,
                 quantity,
@@ -43,6 +48,7 @@ pub fn to_market_event(event: &EventAndSymbol, value: Value) -> Option<MarketEve
         EventAndSymbol::AveragePrice(symbol) => {
             let average_price = value["w"].as_str().and_then(|s| s.parse::<f64>().ok());
             Some(MarketEvent::AveragePrice(AveragePriceEvent {
+                exchange: EXCHANGE_NAME,
                 symbol: symbol.clone(),
                 average_price,
             }))
