@@ -1,5 +1,4 @@
 use serde_json::Value;
-
 use crate::broker::stream::EventAndSymbol;
 use crate::domain::market::{
     AggregateTradeEvent, AveragePriceEvent, KlineEvent, MarketEvent, TradeEvent,
@@ -9,10 +8,18 @@ pub fn to_market_event(event: &EventAndSymbol, value: Value) -> Option<MarketEve
     match event {
         EventAndSymbol::KLine(symbol, interval) => {
             let close = value["k"]["c"].as_str()?.parse::<f64>().ok()?;
+            let open = value["k"]["o"].as_str()?.parse::<f64>().ok()?;
+            let high = value["k"]["h"].as_str()?.parse::<f64>().ok()?;
+            let low = value["k"]["l"].as_str()?.parse::<f64>().ok()?;
+            let volume = value["k"]["v"].as_str()?.parse::<f64>().ok()?;
             Some(MarketEvent::KLine(KlineEvent {
                 symbol: symbol.clone(),
                 interval: interval.clone(),
+                open,
                 close,
+                high,
+                low,
+                volume
             }))
         }
         EventAndSymbol::Trade(symbol) => {

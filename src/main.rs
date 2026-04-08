@@ -1,5 +1,4 @@
 extern crate dotenv;
-extern crate core;
 
 use std::sync::Arc;
 use crate::broker::account::{Account, BalanceType, KlineInterval};
@@ -8,6 +7,7 @@ use dotenv::dotenv;
 use tokio::sync::RwLock;
 use broker::binance::account;
 use crate::broker::binance::stream::BinanceStreamProvider;
+use crate::broker::kraken::stream::KrakenStreamProvider;
 use crate::broker::stream::{EventAndSymbol, StreamProvider};
 use crate::domain::market::MarketEvent;
 use crate::strategies::strategy::TradingStrategy;
@@ -16,6 +16,9 @@ mod broker;
 mod domain;
 mod indicators;
 mod strategies;
+
+// This is not a final design, just a quick test to see if the pieces fit together. 
+// The main function will eventually be replaced by a more robust application structure with proper error handling, configuration management, etc.
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), ()>{
@@ -27,6 +30,7 @@ async fn main() -> Result<(), ()>{
     println!("{:?}", balance);
 
     let mut stream = BinanceStreamProvider::new("stream.binance.com");
+    let mut kraken_stream = KrakenStreamProvider::new("ws.kraken.com");
 
     // Order book updates for BTC/USDT
     stream.subscribe(
@@ -34,6 +38,17 @@ async fn main() -> Result<(), ()>{
         Arc::new(|event: MarketEvent| {
             if let MarketEvent::Trade(trade) = event {
                 let _ = trade.price;
+            }
+        }),
+    );
+
+    // Kline updates for BTC/USDT 1m on Kraken
+    kraken_stream.subscribe(
+        EventAndSymbol::KLine("BTC/USD".to_string(), KlineInterval::OneMinute),
+        Arc::new(|event: MarketEvent| {
+            if let MarketEvent::KLine(kline) = event {
+                let _ = kline.close;
+                println!("Kraken Kline: {} close price {}", kline.symbol, kline.close);
             }
         }),
     );

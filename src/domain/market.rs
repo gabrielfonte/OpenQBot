@@ -8,7 +8,11 @@ use crate::broker::account::KlineInterval;
 pub struct KlineEvent {
     pub symbol: String,
     pub interval: KlineInterval,
+    pub open: f64,
     pub close: f64,
+    pub high: f64,
+    pub low: f64,
+    pub volume: f64,
 }
 
 #[derive(Clone)]

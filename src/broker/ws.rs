@@ -51,6 +51,8 @@ fn tls_connector() -> Result<TlsConnector> {
 pub async fn connect(domain: &str, endpoint: &str) -> Result<FragmentCollector<TokioIo<Upgraded>>> {
     let mut addr = String::from(domain);
     addr.push_str(":443");
+    println!("Resolving {}...", addr);
+    println!("Endpoint: {}", endpoint);
 
     let tcp_stream = TcpStream::connect(&addr).await?;
     let tls_connector = tls_connector().unwrap();
